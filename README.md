@@ -8,7 +8,7 @@ I am fairly new to Python scripting and this is my way of teaching myself. I pro
 
 
 ## Requirements
-Python 3
+Python 3.6.3
 
 [keyring](https://pypi.python.org/pypi/keyring) — Python Library used for storing passwords to Keychain
 
