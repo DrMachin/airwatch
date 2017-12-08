@@ -1,6 +1,7 @@
 #!/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
 
 from toolbox.AirWatchAPI import AirWatchAPI as airwatch
+from toolbox.csvReport import csvReport
 import argparse
 import sys
 
@@ -57,7 +58,10 @@ if args.devices:
 		attribName = search[0]['Name']
 		print('Getting list of all devices with attributes')
 		deviceList = api.searchDeviceCustomAttributes()
-
+		report = csvReport()
+#		print(api.prettyJSON(deviceList))
+		report.jsonToCsv(deviceList['Devices'])
+"""
 		print()
 		report = []
 		for device in deviceList['Devices']:
@@ -72,3 +76,4 @@ if args.devices:
 
 		for item in sorted(report):
 			print(item[0] + '\t' + item[1] + '\t' + item[2])
+"""
