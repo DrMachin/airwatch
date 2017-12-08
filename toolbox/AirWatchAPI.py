@@ -466,7 +466,7 @@ class AirWatchAPI:
 			return response
 
 	"""		Custom Attribute Management	"""
-	def searchCustomAttribute(self, name=None, orgID=None):
+	def searchCustomAttributes(self, name=None, orgID=None):
 		#system/customattributes/search?organizationgroupid={organizationgroupid}&name={name}
 		url = self.__APIURI_SYS_CA + '/search'
 
