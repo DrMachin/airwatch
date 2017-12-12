@@ -474,7 +474,7 @@ class AirWatchAPI:
 		if orgID is not None:
 			plist.append('organizationgroupid=' + orgID)
 		if name is not None:
-			pList.append('name=' + name)
+			pList.append('name=' + quote(name))
 
 		param = self.__formatParameters(pList)
 		return self.__loadJSON(self.apiGetRequest(url + param))

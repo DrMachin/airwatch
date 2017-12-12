@@ -1,13 +1,3 @@
-"""
-	Convert JSON to CSV for reporting.
-	Steps (I, think)
-	1 - First Pass: Parse through JSON to get generate list of all keys
-		-- Going to need to learn how to make recursive loops to dig deep.
-	2 - Create csv header using keys
-	3 - Second Pass: Parse through JSON to match value to key
-
-	This should be fun...
-"""
 
 class csvReport:
 
@@ -32,22 +22,40 @@ class csvReport:
 								keyList.append(citem)
 		return keyList
 
-	def __parseValues(self, jList, keyList):
-		valueList = dict()
+	def __parseValues(self, jList):
+		csvOutput = ''
+		child = False
 		if isinstance(jList, list):
 			for item in jList:
-				valueList = self.__parseValues(item, keyList)
+				csvOutput += self.__parseValues(item)
 		else:
 			for key, value in jList.items():
 				if not isinstance(value, list):
-					if key in keyList:
-						value[str(key)] = value
-		return valueList
+					csvOutput += '\"' + str(value) + '\",'
+				else:
+					child = True
+					childCSV = self.__parseValues(value)
+					copyOut = csvOutput
+					csvOutput = ''
+					for line in childCSV.splitlines():
+						csvOutput += copyOut + line + '\n'
+					csvOutput = csvOutput.rstrip()
+		if not child:
+			csvOutput = csvOutput[:-1]
+		csvOutput += '\n'
+		return csvOutput
 
 
 	def jsonToCsv(self, aJSON):
 		keyList = []
 		if aJSON is not None:
 			keyList = self.__parseKeys(aJSON)
-			parseValues = self.__parseValues(aJSON, keyList)
-			print(parseValues)
+			csvOutput = ''
+			for header in keyList:
+				csvOutput += '\"' + header + '\",'
+			csvOutput = csvOutput[:-1] + '\n'
+			csvOutput += self.__parseValues(aJSON)
+			fh = open("example.csv", "w")
+			fh.write(csvOutput)
+			fh.close()
+			#"""

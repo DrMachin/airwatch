@@ -58,22 +58,19 @@ if args.devices:
 		attribName = search[0]['Name']
 		print('Getting list of all devices with attributes')
 		deviceList = api.searchDeviceCustomAttributes()
-		report = csvReport()
-#		print(api.prettyJSON(deviceList))
-		report.jsonToCsv(deviceList['Devices'])
-"""
+
 		print()
 		report = []
 		for device in deviceList['Devices']:
 			value = None
-			
+			curAttrib = None
 			for attribute in device['CustomAttributes']:
 				if attribute['Name'] == attribName:
-					value = attribute['Value']
+					device['CustomAttributes'] = [attribute]
+					report.append(device)
 					break
-			if value is not None:
-				report.append((value, device['SerialNumber'], device['EnrollmentUserName']))
 
-		for item in sorted(report):
-			print(item[0] + '\t' + item[1] + '\t' + item[2])
-"""
+		print('Exporting report to CSV')
+		cReport = csvReport()
+		cReport.jsonToCsv(report)
+#"""
