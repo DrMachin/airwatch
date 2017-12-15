@@ -1,8 +1,11 @@
 
 class csvReport:
 
-	def __init__(self):
+	__FILENAME = ''
+
+	def __init__(self, fileName):
 		self.data = []
+		self.__FILENAME = fileName
 
 	def __parseKeys(self, jList):
 		keyList = []
@@ -55,7 +58,6 @@ class csvReport:
 				csvOutput += '\"' + header + '\",'
 			csvOutput = csvOutput[:-1] + '\n'
 			csvOutput += self.__parseValues(aJSON)
-			fh = open("example.csv", "w")
+			fh = open(self.__FILENAME, "w")
 			fh.write(csvOutput)
 			fh.close()
-			#"""

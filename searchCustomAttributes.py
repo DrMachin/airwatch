@@ -7,9 +7,10 @@ import sys
 
 """ Accepted Arguments """
 parser = argparse.ArgumentParser(description='AirWatch Custom Attributes Search')
+parser.add_argument('name', help='Get list of devices with matching attribute name')
 parser.add_argument("-l", "--list", help='List all available attributes', action="store_true")
 parser.add_argument('-find', help='Find attribute with matching name')
-parser.add_argument('-devices', help='Get list of devices with matching attribute')
+parser.add_argument('-csv', help='Get list of devices with matching attribute')
 
 args = parser.parse_args()
 
@@ -45,8 +46,8 @@ if args.find:
 	listNames(args.find)
 	sys.exit(0)
 
-if args.devices:
-	attribName = args.devices
+if args.name:
+	attribName = args.name
 	print('\nLooking for devices with matching attribute')
 	search = searchAttributes(attribName)
 	if search is None:
@@ -70,7 +71,10 @@ if args.devices:
 					report.append(device)
 					break
 
-		print('Exporting report to CSV')
-		cReport = csvReport()
-		cReport.jsonToCsv(report)
+		if args.csv:
+			print('Exporting report to CSV')
+			cReport = csvReport(args.csv)
+			cReport.jsonToCsv(report)
+		else:
+			print(api.prettyJSON(report))
 #"""

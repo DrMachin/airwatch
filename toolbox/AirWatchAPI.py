@@ -63,7 +63,7 @@ class AirWatchAPI:
 	__APIURI_SYS_CA			= __APIURI_SYS 			+ "/customattributes"
 
 	"""----- OTHER OPTIONS -----"""
-	__PAGESIZE = "pagesize=10000"
+	__PAGESIZE = "pagesize=500000"
 
 	"""----- END CONSTANTS -----"""
 
