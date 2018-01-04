@@ -44,7 +44,9 @@ class AirWatchAPI:
 	__APIURI_MDM_DEVICE_CA	= __APIURI_MDM_DEVICE 	+ "/customattribute"
 	"""		Mobile Application Management """
 	__APIURI_MAM	 		= __APIURI      		+ "/mam"
-	__APIURI_MAM_VPP		= __APIURI_MAM  		+ "/apps/purchased"
+	__APIURI_MAM_APPS		= __APIURI_MAM 			+ "/apps"
+	__APIURI_MAM_PUB		= __APIURI_MAM_APPS		+ "/public"
+	__APIURI_MAM_VPP		= __APIURI_MAM_APPS		+ "/purchased"
 	"""		Mobile Content Management	"""
 	__APIURI_MCM 			= __APIURI      		+ "/mcm"
 	"""		Mobile Email Management		"""
@@ -221,7 +223,7 @@ class AirWatchAPI:
 		url = self.__APIURI_MDM_SG + "/" + str(sgroupID) + "/apps"
 		return self.__loadJSON(self.apiGetRequest(url))
 
-	"""		Device Management"""
+	"""		Mobile Device Management"""
 	def searchDevices(self, username=None, model=None, platform=None, lastseen=None, ownership=None, iGID=None, compliantstatus=None, 
 		seensince=None):
 		""" Searches for devices using the query information provided.
@@ -334,7 +336,53 @@ class AirWatchAPI:
 		param = self.__formatParameters(pList)
 		return self.__loadJSON(self.apiGetRequest(url + param))
 
-	"""		Application Management"""
+	"""		Mobile Application Management """
+	def searchApplications(self, name=None, appType=None, category=None, orgID=None, bundleID=None):
+		#https://host//api/mam/apps/search?type={type}&applicationtype={applicationtype}&applicationname= {applicationname}&category={category}&locationgroupid={locationgroupid}&bundleid={bundleid}&platform= {platform}&model={model}&status={status}&orderby={orderby}&page={page}&pagesize={pagesize}
+		url = self.__APIURI_MAM_APPS + '/search'
+		
+		pList = []
+
+		if appType is not None:
+			if appType.lower() == 'purchased':
+				return self.searchVPPApplications(name)
+			pList.append("applicationtype=" + appType)
+		if name is not None:
+			pList.append("applicationname=" + quote(name))
+		if category is not None:
+			pList.append("category=" + quote(appType))
+		if orgID is not None:
+			pList.append("locationgroupid=" + str(orgID))
+		if bundleID is not None:
+			pList.append("bundleid=" + quote(bundleID))
+		pList.append("type=app")
+
+		param = self.__formatParameters(pList)
+		return self.__loadJSON(self.apiGetRequest(url + param))
+
+	def searchVPPApplications(self, name):
+		#/mam/apps/purchased/search
+		url = self.__APIURI_MAM_VPP + '/search'
+
+		if name is not None:
+			url += "?applicationname=" + quote(name)
+
+		return self.__loadJSON(self.apiGetRequest(url))
+
+	def getDevicesWithInstalledPublicApp(self, appID, ogID=None):
+		"""
+		Deprecated: GET? Doc says post but it doesn't work
+		 https://host/api/mam/apps/public/{applicationid}/installeddevices?locationgroupid={locationgroupid}&page={page}&pagesize={pagesize}
+		Supported: POST
+		 https://host/api/mam/apps/public/applicationid/devices
+		"""
+		url = self.__APIURI_MAM_PUB + '/' + str(appID) + '/installeddevices'
+		
+		if ogID is not None:
+			url += '?locationgroupid=' + ogID
+
+		return self.__loadJSON(self.apiGetRequest(url))
+
 	def installPurchasedApp(self, appID, serialNumber=None, deviceID=None, udid=None):
 		""" Send Install Purchased App command to device 
 			If Serial, DeviceID or UDID is not provided return None
