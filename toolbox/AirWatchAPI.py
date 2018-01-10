@@ -258,7 +258,7 @@ class AirWatchAPI:
 		if iGID is not None:
 			pList.append("Igid" + iGID)
 		if compliantstatus is not None:
-			pList.append("compliantstatus=" + str(compromised))
+			pList.append("compliantstatus=" + str(compliantstatus))
 		if seensince is not None:
 			pList.append("seensince=" + quote(seensince))
 
