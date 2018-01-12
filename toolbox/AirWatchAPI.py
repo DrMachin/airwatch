@@ -337,7 +337,7 @@ class AirWatchAPI:
 		return self.__loadJSON(self.apiGetRequest(url + param))
 
 	"""		Mobile Application Management """
-	def searchApplications(self, name=None, appType=None, category=None, orgID=None, bundleID=None, platform=None):
+	def searchApplications(self, name=None, appType=None, category=None, orgID=None, bundleID=None, platform=None, active=None):
 		#https://host//api/mam/apps/search?type={type}&applicationtype={applicationtype}&applicationname={applicationname}&category={category}&locationgroupid={locationgroupid}&bundleid={bundleid}&platform= {platform}&model={model}&status={status}&orderby={orderby}&page={page}&pagesize={pagesize}
 		url = self.__APIURI_MAM_APPS + '/search'
 		
@@ -357,6 +357,12 @@ class AirWatchAPI:
 			pList.append("bundleid=" + quote(bundleID))
 		if platform is not None:
 			pList.append("platform=" + platform)
+		if active is not None:
+			if active:
+				pList.append("status=" + 'active')
+			else:
+				pList.append("status=" + 'inactive')
+
 		pList.append("type=app")
 
 		param = self.__formatParameters(pList)
