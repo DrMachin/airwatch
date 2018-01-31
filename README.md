@@ -13,9 +13,9 @@ Python 3.6.3
 [keyring](https://pypi.python.org/pypi/keyring) — Python Library used for storing passwords to Keychain
 
 ### “Tested” on:
-AirWatch Console v.9.1.4
+AirWatch Console v.9.2.2.3
 
-macOS High Sierra 10.13.1
+macOS High Sierra 10.13.3
 
 Python 3.6.3
 
