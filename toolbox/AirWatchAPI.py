@@ -1,8 +1,8 @@
 """
 	TESTED ON:
 		Python 3.6.3
-		macOS High Sierra 10.13.1
-		AirWatch Console v.9.1.4
+		macOS High Sierra 10.13.3
+		AirWatch Console v.9.2.2.3
 """
 from urllib.parse import quote
 from pathlib import Path
@@ -191,33 +191,40 @@ class AirWatchAPI:
 		"""
 		url = self.__APIURI_OGM + "/devicecounts?organizationgroupid" + groupID
 		return self.__loadJSON(self.apiGetRequest(url))
-	def findOrganizationGroup(self, name=None, type=None):
-		"""Searches for Organization Group Details based on the parameters provided in the URL"""
+
+	def findOrganizationGroup(self, name=None, groupType=None, groupID=None):
+		"""Searches for Organization Group Details"""
 		url = self.__APIURI_OGM + "/search"
 
 		pList = []
 		if name is not None:
-			pList.append('name=' + quote(groupName))
-		if type is not None:
-			pList.append('type=' + type)
+			pList.append('name=' + quote(name))
+		if groupType is not None:
+			pList.append('type=' + groupType)
+		if groupID is not None:
+			pList.append('groupid=' + groupID)
 
 		param = self.__formatParameters(pList)
 		return self.__loadJSON(self.apiGetRequest(url + param))
 
-	def findOGbyName(self, groupName):
-		url = self.__APIURI_OGM + "/search?name=" + quote(groupName)
-		return self.__loadJSON(self.apiGetRequest(url))
-
 	"""		Smart Group Management"""
-	def findSmartGroupbyName(self, name):
+	def findSmartGroup(self, name):
 		"""Searches for smart groups using the name."""
 		# /mdm/smartgroups/search?name=
-		url = self.__APIURI_MDM_SG + "/search?name=" + quote(name)
-		return self.__loadJSON(self.apiGetRequest(url))
+		url = self.__APIURI_MDM_SG + "/search"
+
+		pList = []
+		if name is not None:
+			pList.append('name=' + quote(name))
+
+		param = self.__formatParameters(pList)
+		return self.__loadJSON(self.apiGetRequest(url + param))
+
 	def getSmartGroupDeviceDetails(self, sgroupID):
 		"""Retrieves the device details in the smart group."""
 		url = self.__APIURI_MDM_SG + "/" + str(sgroupID) + "/devices"
 		return self.__loadJSON(self.apiGetRequest(url))
+
 	def getSmartGroupAppList(self, sgroupID):
 		"""Gets the list of apps assigned to Smart Group"""
 		url = self.__APIURI_MDM_SG + "/" + str(sgroupID) + "/apps"
@@ -399,7 +406,7 @@ class AirWatchAPI:
 		if serialNumber is not None:
 			payload = "SerialNumber=" + serialNumber
 		elif deviceID is not None:
-			payload = "DeviceId=" + deviceID
+			payload = "DeviceId=" + str(deviceID)
 		elif udid is not None:
 			payload = "Udid=" + udid
 		else:
@@ -407,14 +414,22 @@ class AirWatchAPI:
 		
 		return self.apiPostRequest(url, payload)
 
-	def getDevicesAssignedToPurchasedApp(self, appID):
-		# Supported: https://host/api/mam/purchased/applicationid/devices 
-		#url = self.__APIURI_MAM_VPP + "/applicationid/devices"
-				#/api/mam/apps/purchased/85/installeddevices?locationgroupid=570
-		url = self.__APIURI_MAM_VPP + "/" + str(appID) + "/assigneddevices?" + self.__PAGESIZE
-		#payload = "ApplicationID=" + str(appID)
-		print(url)
-		return self.__loadJSON(self.apiGetRequest(url))
+	def getDevicesAssignedToPurchasedApp(self, appID, orgID=None, status=None):
+		""" Retrieve Devices with Purchased Application Installed or Assigned
+			mam/apps/purchased/applicationID/devices?locationgroupid=ogID&status={installed/assignde}
+		"""
+		
+		url = self.__APIURI_MAM_VPP + '/' + str(appID) + '/devices'
+		
+		pList = []
+
+		if orgID is not None:
+			pList.append("locationgroupid=" + str(orgID))
+		if status is not None:
+			pList.append("status=" + status)
+
+		param = self.__formatParameters(pList)
+		return self.__loadJSON(self.apiGetRequest(url + param))
 
 	"""		Profile Management"""
 	def findDeviceProfile(self, profileName, profileType=None, ogID=None, platform=None, status=None):
