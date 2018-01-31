@@ -4,7 +4,7 @@ from toolbox.AirWatchAPI import AirWatchAPI as airwatch
 import argparse
 
 """	Accepted Arguments """
-parser = argparse.ArgumentParser(description='Search and Report on Deployed Apps')
+parser = argparse.ArgumentParser(description='Update apps assigned to Smart Group')
 parser.add_argument("smartgroup", help='Find apps assigned to smart group')
 parser.add_argument("-orgID", help='Update devices in specified organization group', type=str)
 
