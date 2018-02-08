@@ -225,7 +225,7 @@ class AirWatchAPI:
 		url = self.__APIURI_MDM_SG + "/" + str(sgroupID) + "/devices"
 		return self.__loadJSON(self.apiGetRequest(url))
 
-	def getSmartGroupAppList(self, sgroupID):
+	def getSmartGroupAssignedApps(self, sgroupID):
 		"""Gets the list of apps assigned to Smart Group"""
 		url = self.__APIURI_MDM_SG + "/" + str(sgroupID) + "/apps"
 		return self.__loadJSON(self.apiGetRequest(url))
@@ -318,9 +318,22 @@ class AirWatchAPI:
 		url = self.__APIURI_MDM_DEVICE + "/" + str(deviceID) + "/syncdevice"	
 		return self.apiPostRequest(url)
 
-	def getDeviceAppDetails(self, deviceID):
+	def getDeviceAppDetails(self, deviceID=None, serialNumber=None, udid=None, imei=None, macAddress=None):
 		# mdm/devices/{id}/apps
-		url = self.__APIURI_MDM_DEVICE + '/' + str(deviceID) + '/apps'
+		#devices/apps?searchby={searchby}&id={id}
+		## searchby -- Macaddress, Udid, Serialnumber, ImeiNumber
+		if deviceID is not None:
+			url = self.__APIURI_MDM_DEVICE + '/' + str(deviceID) + '/apps'
+		elif serialNumber is not None:
+			url = self.__APIURI_MDM_DEVICE + '/apps?searchby=serialnumber&id=' + str(serialNumber)
+		elif udid is not None:
+			url = self.__APIURI_MDM_DEVICE + '/apps?searchby=udid&id=' + str(udid)
+		elif imei is not None:
+			url = self.__APIURI_MDM_DEVICE + '/apps?searchby=imeinumber&id=' + str(imei)
+		elif macAddress is not None:
+			url = self.__APIURI_MDM_DEVICE + '/apps?searchby=macaddress&id=' + str(macAddress)
+		else:
+			return None
 		return self.__loadJSON(self.apiGetRequest(url))
 
 	def searchDeviceCustomAttributes(self, deviceID=None, serialNumber=None, orgID=None, startdatetime=None, enddatetime=None):
