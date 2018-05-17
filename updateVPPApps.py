@@ -91,7 +91,7 @@ else:
 		print(app['id'], '\t|', re.split(r" - | – ", app['applicationName'])[0])
 		idList.append(str(app['id']))
 	print()
-	quit()
+	#quit()
 	appID = input('Press Enter to Update All or Enter ID of app to update: ')
 	updateAll = False
 	if not appID:
