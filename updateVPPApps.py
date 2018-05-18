@@ -14,7 +14,7 @@ parser.add_argument("-orgID", help='Only update devices in specified organizatio
 args = parser.parse_args()
 
 if not args.smartgroup and not args.serialnumber and not args.deviceID:
-	args.error ('Either -smartgroup, -serialnumber or -deviceID is required.')
+	parser.error ('Either -smartgroup, -serialnumber or -deviceID is required.')
 	quit()
 
 api = airwatch()
