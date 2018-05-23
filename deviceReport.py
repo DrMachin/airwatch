@@ -22,4 +22,7 @@ else:
 	parser.print_help()
 	quit()
 
-print(api.prettyJSON(search))
+if not 'errorCode' in search.keys():
+	print(api.prettyJSON(search))
+else:
+	print(search['message'])
