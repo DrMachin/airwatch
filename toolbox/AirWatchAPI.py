@@ -110,7 +110,7 @@ class AirWatchAPI:
 			if 	'customerOG' in plist:
 				self.__CUSTOMER_OG = str(plist['customerOG'])
 			elif conStatus:
-				ogSearch = self.findOrganizationGroup(type='Customer')
+				ogSearch = self.findOrganizationGroup(groupType='Customer')
 				plist['customerOG'] = ogSearch['OrganizationGroups'][0]['Id']
 				plistlib.writePlist(plist, plistFile)
 
