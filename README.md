@@ -27,4 +27,4 @@ Host, username, and Customer Org Group ID are stored to a pList file (toolbox.ai
 
 User authentication and tenant api key hashes are stored in the user’s keychain. The keys are airwatch_api_user and airwatch_api_tenant.
 
-Is it secure? Maybe, not really sure. I’m still figuring this out.
+**Is it secure? Maybe, not really sure. I’m still figuring this out.**
