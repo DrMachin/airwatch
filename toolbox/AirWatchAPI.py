@@ -259,7 +259,7 @@ class AirWatchAPI:
 		if platform is not None:
 			pList.append("platform=" + platform)
 		if lastseen is not None:
-			pList.append("lastseen=" + lastseen)
+			pList.append("lastseen=" + str(lastseen))
 		if ownership is not None:
 			pList.append("ownership=" + ownership)
 		if iGID is not None:
@@ -349,9 +349,9 @@ class AirWatchAPI:
 		if deviceID is not None:
 			pList.append("serialnumber=" + serialNumber)
 		if startdatetime is not None:
-			pList.append("startdatetime=" + startdatetime)
+			pList.append("startdatetime=" + str(startdatetime))
 		if enddatetime is not None:
-			pList.append("enddatetime=" + enddatetime)
+			pList.append("enddatetime=" + str(enddatetime))
 
 		param = self.__formatParameters(pList)
 		return self.__loadJSON(self.apiGetRequest(url + param))
