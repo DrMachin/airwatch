@@ -526,9 +526,14 @@ class AirWatchAPI:
 
 		return self.__loadJSON(self.apiGetRequest(url))
 	
-	def tagDevice(self, tagID, deviceID=None, bulkDevices=None, verbose=False):
+	def tagDevice(self, tagID, deviceID=None, bulkDevices=None, remove=False, verbose=False):
 		#mdm/tags/{tagid}/adddevices
-		url = self.__APIURI_MDM_TAGS + '/' + str(tagID) + '/adddevices'
+		#mdm/tags/{tagid}/removedevices
+		url = self.__APIURI_MDM_TAGS + '/' + str(tagID)
+		if not remove:
+			url += '/adddevices'
+		else:
+			url += '/removedevices'
 
 		##	""{\"BulkValues\":{\"Value\":[\"5963\"]}}"
 		payload = "{\"BulkValues\":{\"Value\":["
